@@ -8,6 +8,7 @@
   :root {
     --red: #ff1a2e;
     --red-soft: #ff4d5e;
+    --gas: #7CFC00;
     --bg: #000;
   }
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -68,6 +69,21 @@
     overflow: hidden;
     pointer-events: none;
   }
+  body.shake #stage, body.shake #fx {
+    animation: shake 0.6s linear;
+  }
+  @keyframes shake {
+    0%, 100% { transform: translate(0, 0); }
+    10% { transform: translate(-9px, 4px) rotate(-0.6deg); }
+    20% { transform: translate(8px, -5px) rotate(0.5deg); }
+    30% { transform: translate(-7px, -4px); }
+    40% { transform: translate(9px, 5px) rotate(0.6deg); }
+    50% { transform: translate(-6px, 6px); }
+    60% { transform: translate(7px, -6px) rotate(-0.4deg); }
+    70% { transform: translate(-5px, 3px); }
+    80% { transform: translate(4px, -3px); }
+    90% { transform: translate(-2px, 2px); }
+  }
   .flyer {
     position: absolute;
     left: 0;
@@ -112,6 +128,13 @@
       0 0 90px #ff0022,
       0 0 140px #ff0022;
     animation: neonPulse 2.2s ease-in-out infinite, titleFloat 4s ease-in-out infinite, flicker 7s infinite;
+  }
+  body.v2 .title {
+    animation: neonPulse 2.2s ease-in-out infinite, titleFloat 4s ease-in-out infinite, flicker 7s infinite, hue 5s linear infinite;
+  }
+  @keyframes hue {
+    from { filter: hue-rotate(0deg) brightness(1.2); }
+    to { filter: hue-rotate(360deg) brightness(1.2); }
   }
   .title::before, .title::after {
     content: attr(data-text);
@@ -183,6 +206,203 @@
   @keyframes subBlink {
     0%, 100% { opacity: 1; }
     50% { opacity: 0.45; }
+  }
+
+  /* ---------- COUNTDOWN BOX ---------- */
+  .update-box {
+    position: relative;
+    margin: 12px auto 0;
+    width: min(94vw, 560px);
+    padding: 12px 14px 12px;
+    border: 1px solid rgba(255, 26, 46, 0.8);
+    border-radius: 16px;
+    background: rgba(8, 0, 2, 0.78);
+    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
+    box-shadow: 0 0 22px rgba(255, 0, 30, 0.55), inset 0 0 22px rgba(255, 0, 30, 0.2);
+    pointer-events: none;
+  }
+  .ub-label {
+    font-size: clamp(10px, 2.6vw, 13px);
+    font-weight: 800;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--red-soft);
+    text-shadow: 0 0 8px var(--red);
+  }
+  .ub-time {
+    font-family: "Courier New", Consolas, monospace;
+    font-weight: 900;
+    font-size: clamp(44px, 13vw, 92px);
+    line-height: 1.05;
+    color: #fff;
+    text-shadow: 0 0 8px #fff, 0 0 20px var(--red), 0 0 44px var(--red), 0 0 80px #f02;
+    letter-spacing: 0.06em;
+  }
+  .update-box.hot .ub-time {
+    animation: hotPulse 0.5s ease-in-out infinite;
+    color: #ffdede;
+  }
+  @keyframes hotPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); filter: brightness(1.5); }
+  }
+  .ub-bar {
+    height: 8px;
+    margin: 6px 0 10px;
+    border-radius: 8px;
+    background: rgba(255, 26, 46, 0.2);
+    overflow: hidden;
+    box-shadow: 0 0 8px rgba(255, 0, 30, 0.5);
+  }
+  .ub-bar > i {
+    display: block;
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #ff1a2e, #ff7a00, #ffd000);
+    box-shadow: 0 0 12px #ff1a2e;
+  }
+  .fart-line {
+    font-size: clamp(12px, 3.2vw, 16px);
+    font-weight: 800;
+    color: var(--gas);
+    text-shadow: 0 0 8px var(--gas), 0 0 18px rgba(124, 252, 0, 0.6);
+    letter-spacing: 0.03em;
+  }
+  .fart-line small {
+    display: block;
+    margin-top: 3px;
+    font-size: 0.82em;
+    font-weight: 700;
+    color: #d6ffb0;
+    opacity: 0.9;
+  }
+  .changelog {
+    display: none;
+    margin: 8px 0 0;
+    padding: 0;
+    list-style: none;
+    font-size: clamp(11px, 2.9vw, 14px);
+    font-weight: 700;
+    color: #fff;
+    text-shadow: 0 0 6px var(--red);
+    text-align: left;
+  }
+  .changelog li { margin: 3px 0; }
+  .changelog li::before { content: "+ "; color: var(--gas); }
+  body.v2 .changelog { display: block; }
+  body.v2 .ub-bar { display: none; }
+
+  /* ---------- FART BANNER ---------- */
+  #fartBanner {
+    position: fixed;
+    left: 50%;
+    top: 55%;
+    z-index: 25;
+    transform: translate(-50%, -50%) scale(0.4);
+    font-family: Impact, "Arial Black", sans-serif;
+    font-size: clamp(34px, 11vw, 140px);
+    font-weight: 900;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: #eaffc8;
+    text-shadow: 0 0 10px var(--gas), 0 0 28px var(--gas), 0 0 60px #3f0, 0 0 110px #3f0;
+    opacity: 0;
+    pointer-events: none;
+  }
+  #fartBanner.show { animation: bannerPop 2.2s ease-out forwards; }
+  @keyframes bannerPop {
+    0% { opacity: 0; transform: translate(-50%, -50%) scale(0.3) rotate(-6deg); }
+    12% { opacity: 1; transform: translate(-50%, -50%) scale(1.15) rotate(3deg); }
+    22% { transform: translate(-50%, -50%) scale(0.95) rotate(-2deg); }
+    70% { opacity: 1; transform: translate(-50%, -54%) scale(1) rotate(0deg); }
+    100% { opacity: 0; transform: translate(-50%, -80%) scale(1.25); }
+  }
+  #gasFlash {
+    position: fixed;
+    inset: 0;
+    z-index: 19;
+    pointer-events: none;
+    background: radial-gradient(ellipse at 50% 80%, rgba(124, 252, 0, 0.45), transparent 70%);
+    opacity: 0;
+  }
+  #gasFlash.show { animation: gasFlash 1.6s ease-out forwards; }
+  @keyframes gasFlash {
+    0% { opacity: 0; }
+    15% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+
+  /* ---------- UPDATE SCREEN ---------- */
+  #updateScreen {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: #000;
+    text-align: center;
+    overflow: hidden;
+  }
+  #updateScreen.on { display: flex; animation: scrGlitch 0.35s steps(2) infinite; }
+  @keyframes scrGlitch {
+    0% { transform: translate(0, 0); filter: none; }
+    25% { transform: translate(-3px, 1px); filter: hue-rotate(40deg); }
+    50% { transform: translate(3px, -1px); filter: none; }
+    75% { transform: translate(-1px, 2px); filter: hue-rotate(-40deg); }
+    100% { transform: translate(0, 0); }
+  }
+  #updateScreen::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: repeating-linear-gradient(0deg, rgba(255,0,30,0.07) 0, rgba(255,0,30,0.07) 2px, transparent 3px, transparent 5px);
+  }
+  .us-title {
+    font-family: Impact, "Arial Black", sans-serif;
+    font-size: clamp(28px, 8vw, 84px);
+    text-transform: uppercase;
+    color: #fff;
+    text-shadow: 0 0 10px var(--red), 0 0 30px var(--red), 0 0 70px #f02;
+    margin: 0 0 14px;
+  }
+  .us-bar {
+    width: min(90vw, 560px);
+    height: 22px;
+    border: 2px solid var(--red);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(255, 0, 30, 0.8), inset 0 0 12px rgba(255, 0, 30, 0.5);
+  }
+  .us-bar > i {
+    display: block;
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #ff1a2e, #ff7a00, #ffd000, #fff);
+    box-shadow: 0 0 18px #ff1a2e;
+  }
+  .us-pct {
+    margin: 10px 0 8px;
+    font-family: "Courier New", monospace;
+    font-size: clamp(26px, 7vw, 50px);
+    font-weight: 900;
+    color: #fff;
+    text-shadow: 0 0 12px var(--red), 0 0 28px var(--red);
+  }
+  .us-log {
+    width: min(92vw, 560px);
+    min-height: 110px;
+    font-family: "Courier New", monospace;
+    font-size: clamp(11px, 3vw, 14px);
+    font-weight: 700;
+    color: var(--gas);
+    text-shadow: 0 0 6px var(--gas);
+    text-align: left;
+    white-space: pre-wrap;
   }
 
   body.paused .title,
@@ -300,20 +520,16 @@
     font-size: 1.2em;
     text-shadow: 0 0 10px var(--red), 0 0 20px var(--red);
   }
-  .hint {
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: calc(env(safe-area-inset-bottom, 0px) + 6px);
-    z-index: 5;
-    text-align: center;
-    font-size: 11px;
-    color: rgba(255, 90, 105, 0.0);
-    pointer-events: none;
-  }
+  .counter.gas { border-color: rgba(124, 252, 0, 0.7); text-shadow: 0 0 8px var(--gas); }
+  .counter.gas b { color: var(--gas); text-shadow: 0 0 10px var(--gas), 0 0 20px var(--gas); }
   @media (max-width: 520px) {
     .panel { gap: 6px; padding: 8px; }
     .btn { padding: 10px 10px; }
+    .update-box { padding: 8px 10px; margin-top: 8px; }
+  }
+  @media (max-height: 640px) {
+    .subtitle { display: none; }
+    .ub-time { font-size: clamp(34px, 9vw, 60px); }
   }
   @media (prefers-reduced-motion: reduce) {
     .title, .title::before, .title::after, .subtitle, body::before { animation: none; }
@@ -324,11 +540,37 @@
 
 <canvas id="fx"></canvas>
 <div id="stage"></div>
+<div id="gasFlash"></div>
+<div id="fartBanner">💨 ТОСИК ПУКНУЛ 💨</div>
 
 <header>
   <h1 class="title" data-text="СДЕЛАНО SALYSHIN">СДЕЛАНО SALYSHIN</h1>
-  <p class="subtitle">мемные оскорбления Тосика</p>
+  <p class="subtitle" id="subtitle">мемные оскорбления Тосика</p>
+
+  <div class="update-box" id="updateBox">
+    <div class="ub-label" id="ubLabel">⚠ до масштабного обновления ⚠</div>
+    <div class="ub-time" id="ubTime">03:00</div>
+    <div class="ub-bar"><i id="ubFill"></i></div>
+    <div class="fart-line">
+      💨 А пока: Тосик пукает каждую минуту!
+      <small id="fartInfo">Следующий пук через 01:00 · Пуков: 0</small>
+    </div>
+    <ul class="changelog">
+      <li>25 новых мемных оскорблений</li>
+      <li>Неоновый след от пальца и курсора</li>
+      <li>Радужный глитч-заголовок</li>
+      <li>Больше хаоса: до 400 надписей</li>
+      <li>Пуки теперь со звуком и тряской экрана</li>
+    </ul>
+  </div>
 </header>
+
+<div id="updateScreen">
+  <h2 class="us-title" id="usTitle">УСТАНОВКА ОБНОВЛЕНИЯ 2.0</h2>
+  <div class="us-bar"><i id="usFill"></i></div>
+  <div class="us-pct" id="usPct">0%</div>
+  <div class="us-log" id="usLog"></div>
+</div>
 
 <div class="panel" id="panel">
   <button class="btn" id="moreBtn" type="button">ЕЩЁ БОЛЬШЕ КРИНЖА</button>
@@ -338,8 +580,10 @@
     <input type="range" id="speed" min="0.2" max="4" step="0.1" value="1">
     <output id="speedVal">1.0x</output>
   </label>
+  <button class="btn" id="soundBtn" type="button">ЗВУК: ВЫКЛ</button>
   <button class="btn" id="fsBtn" type="button">Полный экран</button>
   <div class="counter">Надписей: <b id="count">0</b></div>
+  <div class="counter gas">Пуков: <b id="fartCount">0</b></div>
 </div>
 
 <script>
@@ -383,39 +627,90 @@
     "Тосик — чемпион мира по кринжу 💀",
     "Тосик.exe перестал отвечать.",
     "Тосик, ты загрузился, но не до конца.",
-    "Тосик — ходячая ошибка системы."
+    "Тосик — ходячая ошибка системы.",
+    "Тосик пукает каждую минуту 💨"
   ];
+
+  /* новые фразы — приходят с обновлением 2.0 */
+  var PHRASES_V2 = [
+    "Тосик 2.0 — тот же баг, но в HD",
+    "Тосик пукнул — сервер лёг 💨",
+    "Тосик газовая атака на минималках 💨",
+    "Тосик пуккачу ⚡💨",
+    "Тосик ходячий освежитель... наоборот",
+    "Тосик обновился, а мозг — нет",
+    "Тосик патч 2.0: пуков стало больше",
+    "Тосик DLC «Пук в кармане» 💨",
+    "Тосик режим «Невидимка», но с запахом",
+    "Тосик вентилятор без лопастей",
+    "Тосик кулер, который не охлаждает",
+    "Тосик реактор на кефире 💨",
+    "Тосик турбо-пердун 3000",
+    "Тосик версия 2.0 — кринж нового поколения",
+    "Тосик сервер перегружен пуками",
+    "Тосик запустил анимацию «Пшшш»",
+    "Тосик газонокосилка без газона",
+    "Тосик апдейт скачал, а ум — нет",
+    "Тосик лагает даже в паузе",
+    "Тосик скин «Картошка» за 99 рублей 🥔",
+    "Тосик секретная концовка: пук 💨",
+    "Тосик легендарный дроп: носок",
+    "Тосик сломал игру одним пуком",
+    "Тосик пинг 999, мозг оффлайн",
+    "Тосик cheat-код: нажми на живот 💨"
+  ];
+
+  var FART_WORDS = ["ПУУУК 💨", "пффффт", "ПРРРРР 💨", "бррр-пук", "💨💨💨", "тууууут", "пшшшш", "ФУУУ 🤢"];
 
   var COLORS = [
     "#ff1a2e", "#ff4d5e", "#ff0066", "#ff7a00", "#ffd000",
     "#00f0ff", "#39ff14", "#ff00e6", "#b14dff", "#ffffff", "#ff3b3b"
   ];
+  var GAS_COLORS = ["#7CFC00", "#39ff14", "#b8ff3a", "#a0ff00", "#d6ff7a"];
 
   var stage = document.getElementById("stage");
   var canvas = document.getElementById("fx");
   var ctx = canvas.getContext("2d");
   var countEl = document.getElementById("count");
+  var fartCountEl = document.getElementById("fartCount");
   var moreBtn = document.getElementById("moreBtn");
   var pauseBtn = document.getElementById("pauseBtn");
   var fsBtn = document.getElementById("fsBtn");
+  var soundBtn = document.getElementById("soundBtn");
   var speedInput = document.getElementById("speed");
   var speedVal = document.getElementById("speedVal");
   var panel = document.getElementById("panel");
+
+  var ubBox = document.getElementById("updateBox");
+  var ubLabel = document.getElementById("ubLabel");
+  var ubTime = document.getElementById("ubTime");
+  var ubFill = document.getElementById("ubFill");
+  var fartInfo = document.getElementById("fartInfo");
+  var fartBanner = document.getElementById("fartBanner");
+  var gasFlash = document.getElementById("gasFlash");
+  var updateScreen = document.getElementById("updateScreen");
+  var usFill = document.getElementById("usFill");
+  var usPct = document.getElementById("usPct");
+  var usLog = document.getElementById("usLog");
+  var usTitle = document.getElementById("usTitle");
+  var subtitle = document.getElementById("subtitle");
 
   var W = window.innerWidth;
   var H = window.innerHeight;
   var dpr = Math.min(window.devicePixelRatio || 1, 2);
   var isSmall = Math.min(W, H) < 600;
   var MAX_FLYERS = 260;
-  var MAX_PARTICLES = 700;
+  var MAX_PARTICLES = 900;
 
   var flyers = [];
   var particles = [];
   var paused = false;
   var speed = 1;
+  var v2 = false;
 
   function rand(a, b) { return a + Math.random() * (b - a); }
   function pick(arr) { return arr[(Math.random() * arr.length) | 0]; }
+  function pad(n) { return (n < 10 ? "0" : "") + n; }
 
   /* ---------- canvas ---------- */
   function resizeCanvas() {
@@ -449,7 +744,7 @@
     g.fillRect(0, 0, s, s);
     return c;
   }
-  COLORS.forEach(function (c) { sprites[c] = makeSprite(c); });
+  COLORS.concat(GAS_COLORS).forEach(function (c) { sprites[c] = makeSprite(c); });
 
   /* ---------- particles ---------- */
   function addAmbient(n) {
@@ -467,12 +762,12 @@
     }
   }
 
-  function burst(x, y) {
-    var n = isSmall ? 26 : 38;
+  function burst(x, y, big) {
+    var n = (isSmall ? 26 : 38) * (big ? 2 : 1);
     for (var i = 0; i < n; i++) {
       if (particles.length >= MAX_PARTICLES) break;
       var a = rand(0, Math.PI * 2);
-      var v = rand(60, 360);
+      var v = rand(60, big ? 560 : 360);
       var col = Math.random() < 0.45 ? "#ff1a2e" : pick(COLORS);
       var life = rand(0.7, 1.5);
       particles.push({
@@ -482,6 +777,41 @@
         life: life, max: life,
         ambient: false,
         sprite: sprites[col]
+      });
+    }
+  }
+
+  function trail(x, y) {
+    for (var i = 0; i < 2; i++) {
+      if (particles.length >= MAX_PARTICLES) break;
+      var col = Math.random() < 0.5 ? "#ff1a2e" : pick(COLORS);
+      var life = rand(0.4, 0.8);
+      particles.push({
+        x: x + rand(-6, 6), y: y + rand(-6, 6),
+        vx: rand(-40, 40), vy: rand(-40, 40),
+        size: rand(8, 20),
+        life: life, max: life,
+        ambient: false,
+        sprite: sprites[col]
+      });
+    }
+  }
+
+  function gasCloud() {
+    var n = isSmall ? 70 : 110;
+    var cx = rand(W * 0.2, W * 0.8);
+    for (var i = 0; i < n; i++) {
+      if (particles.length >= MAX_PARTICLES) break;
+      var life = rand(1.4, 3.2);
+      particles.push({
+        x: cx + rand(-W * 0.18, W * 0.18),
+        y: H * rand(0.7, 1.0),
+        vx: rand(-90, 90), vy: rand(-220, -40),
+        size: rand(30, 90),
+        life: life, max: life,
+        ambient: false,
+        gas: true,
+        sprite: sprites[pick(GAS_COLORS)]
       });
     }
   }
@@ -496,6 +826,15 @@
         if (p.y < -30) { p.y = H + 30; p.x = rand(0, W); }
         if (p.x < -30) p.x = W + 30;
         if (p.x > W + 30) p.x = -30;
+      } else if (p.gas) {
+        var kg = Math.pow(0.35, dt);
+        p.vx *= kg;
+        p.vy = p.vy * kg - 20 * dt;
+        p.x += p.vx * dt;
+        p.y += p.vy * dt;
+        p.size += 18 * dt;
+        p.life -= dt;
+        if (p.life <= 0) particles.splice(i, 1);
       } else {
         var k = Math.pow(0.12, dt * speed);
         p.vx *= k;
@@ -516,6 +855,9 @@
       var alpha, size = p.size;
       if (p.ambient) {
         alpha = 0.25 + 0.25 * Math.sin(p.tw);
+      } else if (p.gas) {
+        var tg = p.life / p.max;
+        alpha = Math.max(0, Math.min(0.55, tg * 0.7));
       } else {
         var t = p.life / p.max;
         alpha = Math.max(0, Math.min(1, t * 1.2));
@@ -533,13 +875,13 @@
     countEl.textContent = flyers.length;
   }
 
-  function createFlyer(text) {
+  function createFlyer(text, colorOverride) {
     var el = document.createElement("div");
     el.className = "flyer";
-    el.textContent = text || pick(PHRASES);
+    el.textContent = text || pick(v2 && Math.random() < 0.5 ? PHRASES_V2 : PHRASES);
 
     var base = isSmall ? rand(13, 26) : rand(15, 40);
-    var color = pick(COLORS);
+    var color = colorOverride || pick(COLORS);
     el.style.fontSize = base.toFixed(1) + "px";
     el.style.color = color;
     el.style.textShadow =
@@ -565,7 +907,7 @@
       vy: Math.sin(angle) * spd,
       rot: rand(-7, 7),
       rotV: rand(-12, 12),
-      rotBase: 0
+      ttl: 0
     };
     if (Math.abs(f.vx) < 25) f.vx = f.vx < 0 ? -25 : 25;
     if (Math.abs(f.vy) < 25) f.vy = f.vy < 0 ? -25 : 25;
@@ -581,8 +923,17 @@
 
   function updateFlyers(dt) {
     var s = dt * speed;
-    for (var i = 0; i < flyers.length; i++) {
+    for (var i = flyers.length - 1; i >= 0; i--) {
       var f = flyers[i];
+      if (f.ttl > 0) {
+        f.ttl -= dt;
+        if (f.ttl <= 0) {
+          if (f.el.parentNode) f.el.parentNode.removeChild(f.el);
+          flyers.splice(i, 1);
+          updateCount();
+          continue;
+        }
+      }
       f.x += f.vx * s;
       f.y += f.vy * s;
       var maxX = W - f.w;
@@ -611,6 +962,232 @@
     }
     updateCount();
     return added;
+  }
+
+  /* ---------- sound ---------- */
+  var audioCtx = null;
+  var soundOn = false;
+  function ensureAudio() {
+    if (audioCtx) return audioCtx;
+    try {
+      var AC = window.AudioContext || window.webkitAudioContext;
+      if (AC) audioCtx = new AC();
+    } catch (e) { audioCtx = null; }
+    return audioCtx;
+  }
+  function fartSound() {
+    if (!soundOn) return;
+    var ac = ensureAudio();
+    if (!ac) return;
+    try {
+      if (ac.state === "suspended") ac.resume();
+      var t0 = ac.currentTime;
+      var dur = rand(0.7, 1.2);
+      var osc = ac.createOscillator();
+      var lfo = ac.createOscillator();
+      var lfoGain = ac.createGain();
+      var gain = ac.createGain();
+      var filt = ac.createBiquadFilter();
+      osc.type = "sawtooth";
+      osc.frequency.setValueAtTime(rand(95, 130), t0);
+      osc.frequency.exponentialRampToValueAtTime(rand(38, 55), t0 + dur);
+      lfo.type = "square";
+      lfo.frequency.setValueAtTime(rand(28, 45), t0);
+      lfo.frequency.linearRampToValueAtTime(rand(12, 20), t0 + dur);
+      lfoGain.gain.value = 22;
+      lfo.connect(lfoGain);
+      lfoGain.connect(osc.frequency);
+      filt.type = "lowpass";
+      filt.frequency.value = 420;
+      gain.gain.setValueAtTime(0.0001, t0);
+      gain.gain.exponentialRampToValueAtTime(0.55, t0 + 0.05);
+      gain.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+      osc.connect(filt);
+      filt.connect(gain);
+      gain.connect(ac.destination);
+      osc.start(t0);
+      lfo.start(t0);
+      osc.stop(t0 + dur + 0.05);
+      lfo.stop(t0 + dur + 0.05);
+    } catch (e) {}
+  }
+  function beep(freq, len) {
+    if (!soundOn) return;
+    var ac = ensureAudio();
+    if (!ac) return;
+    try {
+      var t0 = ac.currentTime;
+      var o = ac.createOscillator();
+      var g = ac.createGain();
+      o.type = "square";
+      o.frequency.value = freq;
+      g.gain.setValueAtTime(0.12, t0);
+      g.gain.exponentialRampToValueAtTime(0.0001, t0 + len);
+      o.connect(g);
+      g.connect(ac.destination);
+      o.start(t0);
+      o.stop(t0 + len + 0.02);
+    } catch (e) {}
+  }
+
+  /* ---------- farts ---------- */
+  var fartTotal = 0;
+  var shakeTimer = null;
+  function fart() {
+    fartTotal++;
+    fartCountEl.textContent = fartTotal;
+
+    fartBanner.classList.remove("show");
+    gasFlash.classList.remove("show");
+    void fartBanner.offsetWidth;
+    fartBanner.classList.add("show");
+    gasFlash.classList.add("show");
+
+    document.body.classList.add("shake");
+    clearTimeout(shakeTimer);
+    shakeTimer = setTimeout(function () { document.body.classList.remove("shake"); }, 650);
+
+    gasCloud();
+    var n = v2 ? 9 : 5;
+    for (var i = 0; i < n; i++) {
+      if (flyers.length >= MAX_FLYERS + 40) break;
+      var f = createFlyer(pick(FART_WORDS), pick(GAS_COLORS));
+      f.ttl = rand(7, 12);
+      f.x = rand(0, Math.max(1, W - f.w));
+      f.y = H - f.h - rand(0, 40);
+      f.vy = -Math.abs(f.vy) - 80;
+    }
+    updateCount();
+    fartSound();
+  }
+
+  /* ---------- update sequence ---------- */
+  var LIMIT = 400;
+  var UPDATE_MS = 3 * 60 * 1000;
+  var FART_MS = 60 * 1000;
+  var startTime = Date.now();
+  var nextFart = startTime + FART_MS;
+  var updating = false;
+  var updated = false;
+  var lastSecShown = -1;
+
+  var LOG_LINES = [
+    "> подключение к серверу Тосика...",
+    "> скачивание патча v2.0 [OK]",
+    "> проверка мозга Тосика... не найден",
+    "> установка новых оскорблений (25 шт.)",
+    "> калибровка кринж-реактора",
+    "> фильтрация запаха... ошибка",
+    "> включение неонового следа",
+    "> усиление хаоса x10",
+    "> готово. Тосик перезагружен."
+  ];
+
+  function startUpdate() {
+    if (updating || updated) return;
+    updating = true;
+    updateScreen.classList.add("on");
+    usLog.textContent = "";
+    usFill.style.width = "0%";
+    usPct.textContent = "0%";
+    usTitle.textContent = "УСТАНОВКА ОБНОВЛЕНИЯ 2.0";
+    document.body.classList.add("shake");
+    var dur = 7000;
+    var t0 = performance.now();
+    var shown = 0;
+    function step(now) {
+      var k = Math.min(1, (now - t0) / dur);
+      /* неравномерный прогресс, как у настоящих обновлений */
+      var eased = k < 0.4 ? k * 1.2 : k < 0.7 ? 0.48 + (k - 0.4) * 0.5 : 0.63 + (k - 0.7) * 1.23;
+      eased = Math.min(1, eased);
+      var pct = Math.floor(eased * 100);
+      usFill.style.width = pct + "%";
+      usPct.textContent = pct + "%";
+      var needed = Math.floor(k * LOG_LINES.length);
+      while (shown < needed && shown < LOG_LINES.length) {
+        usLog.textContent += LOG_LINES[shown] + "\n";
+        beep(300 + shown * 70, 0.08);
+        shown++;
+      }
+      if (k < 1) {
+        requestAnimationFrame(step);
+      } else {
+        while (shown < LOG_LINES.length) { usLog.textContent += LOG_LINES[shown] + "\n"; shown++; }
+        usFill.style.width = "100%";
+        usPct.textContent = "100%";
+        usTitle.textContent = "ГОТОВО! ТОСИК 2.0";
+        setTimeout(finishUpdate, 900);
+      }
+    }
+    requestAnimationFrame(step);
+  }
+
+  function finishUpdate() {
+    updateScreen.classList.remove("on");
+    document.body.classList.remove("shake");
+    updating = false;
+    updated = true;
+    v2 = true;
+    MAX_FLYERS = LIMIT;
+    document.body.classList.add("v2");
+    ubBox.classList.remove("hot");
+    ubLabel.textContent = "✔ обновление 2.0 установлено ✔";
+    ubTime.textContent = "v2.0";
+    subtitle.textContent = "тосик 2.0 · кринж нового поколения";
+    document.title = "СДЕЛАНО SALYSHIN — Тосик 2.0";
+
+    /* новые надписи */
+    PHRASES_V2.forEach(function (t) {
+      var f = createFlyer(t);
+      f.el.style.fontWeight = "900";
+    });
+    spawnMore(15);
+
+    /* салют */
+    for (var i = 0; i < 7; i++) {
+      (function (i) {
+        setTimeout(function () {
+          burst(rand(W * 0.1, W * 0.9), rand(H * 0.2, H * 0.8), true);
+          beep(400 + i * 90, 0.1);
+        }, i * 180);
+      })(i);
+    }
+    gasFlash.classList.remove("show");
+    void gasFlash.offsetWidth;
+    gasFlash.classList.add("show");
+  }
+
+  function tickTimers() {
+    var now = Date.now();
+
+    /* пук каждую минуту */
+    if (now >= nextFart) {
+      fart();
+      nextFart += FART_MS;
+      if (nextFart <= now) nextFart = now + FART_MS;
+    }
+    var toFart = Math.max(0, Math.ceil((nextFart - now) / 1000));
+    var fm = Math.floor(toFart / 60);
+    var fs = toFart % 60;
+    fartInfo.textContent = "Следующий пук через " + pad(fm) + ":" + pad(fs) + " · Пуков: " + fartTotal;
+
+    /* обратный отсчёт до обновления */
+    if (!updated && !updating) {
+      var left = Math.max(0, UPDATE_MS - (now - startTime));
+      var secs = Math.ceil(left / 1000);
+      if (secs !== lastSecShown) {
+        lastSecShown = secs;
+        ubTime.textContent = pad(Math.floor(secs / 60)) + ":" + pad(secs % 60);
+        if (secs <= 10 && secs > 0) { beep(660, 0.06); }
+      }
+      ubFill.style.width = (100 * (1 - left / UPDATE_MS)).toFixed(1) + "%";
+      if (secs <= 10) ubBox.classList.add("hot");
+      if (left <= 0) {
+        ubTime.textContent = "00:00";
+        ubLabel.textContent = "установка...";
+        startUpdate();
+      }
+    }
   }
 
   /* ---------- main loop ---------- */
@@ -651,6 +1228,17 @@
     speedVal.textContent = speed.toFixed(1) + "x";
   });
 
+  soundBtn.addEventListener("click", function () {
+    soundOn = !soundOn;
+    soundBtn.classList.toggle("on", soundOn);
+    soundBtn.textContent = soundOn ? "ЗВУК: ВКЛ" : "ЗВУК: ВЫКЛ";
+    if (soundOn) {
+      ensureAudio();
+      if (audioCtx && audioCtx.state === "suspended") audioCtx.resume();
+      fartSound();
+    }
+  });
+
   function isFullscreen() {
     return document.fullscreenElement || document.webkitFullscreenElement;
   }
@@ -678,6 +1266,16 @@
     burst(e.clientX, e.clientY);
   }, { passive: true });
 
+  /* неоновый след — только после обновления 2.0 */
+  var lastTrail = 0;
+  window.addEventListener("pointermove", function (e) {
+    if (!v2 || paused) return;
+    var t = performance.now();
+    if (t - lastTrail < 25) return;
+    lastTrail = t;
+    trail(e.clientX, e.clientY);
+  }, { passive: true });
+
   /* resize */
   var resizeTimer = null;
   window.addEventListener("resize", function () {
@@ -699,6 +1297,8 @@
   addAmbient(isSmall ? 35 : 70);
   PHRASES.forEach(function (t) { createFlyer(t); });
   updateCount();
+  tickTimers();
+  setInterval(tickTimers, 250);
   requestAnimationFrame(function (t) { last = t; requestAnimationFrame(frame); });
 })();
 </script>
